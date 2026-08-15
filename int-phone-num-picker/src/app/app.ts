@@ -1,9 +1,9 @@
 import { Component, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { PhoneNumPicker } from '../../projects/phone-num-picker/src/public-api';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  imports: [PhoneNumPicker],
   templateUrl: './app.html',
   styleUrl: './app.scss'
 })

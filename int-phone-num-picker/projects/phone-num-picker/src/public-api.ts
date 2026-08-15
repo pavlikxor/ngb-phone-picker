@@ -3,3 +3,4 @@
  */
 
 export * from './lib/phone-num-picker';
+export * from './lib/phone-num.validator';

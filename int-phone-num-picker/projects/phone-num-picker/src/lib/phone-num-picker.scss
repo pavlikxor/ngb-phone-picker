@@ -1,0 +1,14 @@
+@import 'country-flag-icons/3x2/flags.css';
+
+.country-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+}
+
+.flag {
+    width: 24px;
+    display: inline-flex;
+}
+

@@ -1,0 +1,107 @@
+<button
+  type="button"
+  class="country-list__dropdown-btn"
+  [matMenuTriggerFor]="menu"
+  (menuOpened)="countrySearch.focus()"
+  //[disabled]="phoneNumberControl.disabled"
+  >
+  <!-- @if(selectedCountry){
+  <!-- <span
+    class="flag"
+    [style.background-image]="
+        'url(assets/flag-icons/' + (selectedCountry.cc | lowercase) + '.svg)'
+      "></span>
+  <span class="code-prefix">{{ selectedCountry.prefix }}</span> -->
+  <!-- <i-feather
+    name="chevron-down"
+    class="core-size-16"></i-feather> -->
+</button>
+<mat-menu #menu="matMenu">
+  <mat-form-field class="country-list__search-input">
+    <input
+      matInput
+      #countrySearch
+      type="text"
+      //(click)="$event.stopPropagation()"
+      //[formControl]="countrySearchControl" 
+      />
+  </mat-form-field>
+  <div class="country-list__container">
+    @if(true){
+        @for (country of prefferedCountries(); track $index) {
+    <button
+      type="button"
+      class="core-menu-line country-list__item-btn"
+      //(click)="countryCodeSelectClick(country)"
+      >
+      <!-- <span
+        class="flag"
+       // *ngIf="country"
+        [style.background-image]="
+            'url(assets/flag-icons/' + (country.cc) + '.svg)'
+          "></span>
+      <span class="country-list--name">{{ country.name }}</span> -->
+      <!-- {{ country.prefix }} -->
+    </button>
+    }}
+    @for (country of filteredCountries(); track $index) {
+    <button
+      type="button"
+      class="core-menu-line country-list__item-btn"
+      //(click)="countryCodeSelectClick(country)"
+      >
+      @if(country){
+      <span
+        class="flag"
+        //[style.background-image]="'url(assets/flag-icons/' + (country.cc) + '.svg)'"
+        ></span>}
+      <!-- <span
+        class="country-list--name"
+        [highlightText]="countrySearchControl.value">
+        {{ country.name }}
+      </span>
+      {{ country.prefix }} -->
+    </button>}
+  </div>
+</mat-menu>
+
+<mat-form-field class="phone-input-field">
+  <mat-label>Phone</mat-label>
+  <input
+    type="text"
+    #phoneInput
+    matInput
+    //[formControl]="phoneNumberControl"
+    //(input)="phoneNumberInput(phoneInput.value)" 
+    />
+  <!-- @if(phoneNumberControl.errors?.phoneNumberError){
+  <mat-error aqa="phone-input__common-error">Invalid phone number</mat-error>
+  } @if(phoneNumberControl.errors?.externalError){
+  <mat-error aqa="phone-input__duplicate-error">
+    This phone number is already taken
+  </mat-error>
+  } -->
+</mat-form-field>
+
+<form>
+  <div class="full-width">
+    <label>Phone Number</label>
+    <div class="country-list">
+      @for (c of countryOptions(); track c.code) {
+      <div class="country-row">
+        <span class="name">{{ c.code }}</span>
+        <span [class]="'flag:' + c.code"></span>
+        <span class="calling-code">
+          +{{ c.countryCode }}---{{c.countryName}}
+        </span>
+      </div>
+      }
+    </div>
+    <input
+      formControlName="phone"
+      placeholder="+1 202-555-0143" />
+    <!-- @if (form.get('phone')?.hasError('invalidPhoneNumber')) {
+    <span>Invalid phone number for the selected region.</span>
+    } -->
+  </div>
+</form>
