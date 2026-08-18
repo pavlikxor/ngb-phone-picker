@@ -1,1 +1,5 @@
-<lib-phone-num-picker [region]="'en'"></lib-phone-num-picker>
+<lib-phone-num-picker
+  [formField]="phoneForm.number"
+  [prefferedCountries]="['ua','au']"></lib-phone-num-picker>
+
+<pre>{{phoneForm().value()|json}}</pre>

@@ -1,14 +1,185 @@
 @import 'country-flag-icons/3x2/flags.css';
 
-.country-item {
+// ============================================================================
+// DESIGN TOKENS
+// ============================================================================
+
+// Colors - Core
+$core-white: #ffffff;
+$core-dark: #333333;
+
+// Colors - Gray
+$core-gray-100: #f7f7f7;
+$core-gray-200: #ebebeb;
+$core-gray-300: #cccccc;
+$core-gray-400: #8e8e8e;
+$core-gray-700: #474747;
+
+// Colors - Blue
+$core-blue-100: #f0f7ff;
+$core-blue-600: #2879c7;
+
+// ============================================================================
+// HOST & FLAG STYLES
+// ============================================================================
+
+:host {
+  position: relative;
+  display: block;
+}
+
+.country--flag {
+  border: 0.3px solid #eeeeee;
+}
+
+.country-list {
+  &__dropdown-btn {
+    $btn-bg: #ffffff;
+    $btn-border-focus: #2563eb;
+    $chevron-color: #6b7280;
+    $transition-speed: 0.2s;
     display: flex;
+    border: none;
+    background-color: $btn-bg;
+    outline: none;
+    cursor: pointer;
+    width: 85px;
     align-items: center;
-    gap: 8px;
-    margin-bottom: 4px;
+    justify-content: space-between;
+    padding: 6px;
+
+    transition:
+      border-color $transition-speed ease,
+      box-shadow $transition-speed ease,
+      background-color $transition-speed ease;
+
+    &.empty {
+      width: 120px;
+    }
+
+    &::after {
+      content: '';
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      margin-left: 10px;
+      margin-top: -3px;
+      border-right: 2px solid $chevron-color;
+      border-bottom: 2px solid $chevron-color;
+      transform: rotate(45deg);
+      transition:
+        transform $transition-speed ease,
+        margin-top $transition-speed ease;
+      flex-shrink: 0;
+    }
+
+    &[aria-expanded='true']::after {
+      transform: rotate(225deg);
+      margin-top: 3px;
+    }
+  }
+  &__search-input {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    padding: 12px;
+    margin: 0;
+    border: none;
+    border-bottom: 1px solid #eee;
+    border-radius: 0;
+    background-color: #fff;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  &__container {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    max-height: 400px;
+    display: flex;
+    flex-direction: column;
+
+    &::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: $core-gray-300;
+      border-radius: 3px;
+      border: 2px solid $core-white;
+
+      &:hover {
+        background-color: $core-gray-400;
+      }
+    }
+
+    scrollbar-color: $core-gray-300 transparent;
+    scrollbar-width: thin;
+  }
+  &__country-btn {
+    padding: 8px 12px !important;
+    border-left: 3px solid transparent !important;
+    color: $core-dark;
+    min-height: 44px !important;
+    justify-content: flex-start;
+
+    ::ng-deep .mat-mdc-menu-item-text {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex: 1;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+
+    &:focus-visible {
+      outline: 2px solid $core-blue-600;
+      outline-offset: -2px;
+      background-color: $core-gray-100 !important;
+    }
+  }
 }
 
-.flag {
-    width: 24px;
-    display: inline-flex;
-}
+// ============================================================================
+// MATERIAL MENU PANEL STYLES (Scoped by component class selectors)
+// ============================================================================
 
+// Style menu panels only when they contain our component's custom classes
+// This ensures styles only apply to this library component's menus
+.mat-mdc-menu-panel {
+
+  // Panel styling - only for panels containing our content
+  &:has(.country-list__container) {
+    overflow: hidden;
+    max-width: 320px;
+
+    .mat-mdc-menu-content {
+      padding: 0;
+      background-color: $core-white;
+    }
+
+    // Menu items (country buttons)
+    .mat-mdc-menu-item {
+      &.country-list__country-btn {
+        .mat-mdc-menu-item-text {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          flex: 1;
+          white-space: nowrap;
+          overflow: hidden;
+        }
+
+        &:hover {
+          background-color: $core-gray-100 !important;
+          border-left-color: $core-blue-600 !important;
+          color: $core-dark !important;
+        }
+      }
+    }
+  }
+}
