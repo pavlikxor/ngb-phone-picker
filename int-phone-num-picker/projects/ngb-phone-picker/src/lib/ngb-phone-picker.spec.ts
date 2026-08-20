@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PhoneNumPicker } from './phone-num-picker';
+import { NgbPhonePicker } from './ngb-phone-picker';
 
-describe('PhoneNumPicker', () => {
-  let component: PhoneNumPicker;
-  let fixture: ComponentFixture<PhoneNumPicker>;
+describe('NgbPhonePicker', () => {
+  let component: NgbPhonePicker;
+  let fixture: ComponentFixture<NgbPhonePicker>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [PhoneNumPicker],
+      imports: [NgbPhonePicker],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(PhoneNumPicker);
+    fixture = TestBed.createComponent(NgbPhonePicker);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

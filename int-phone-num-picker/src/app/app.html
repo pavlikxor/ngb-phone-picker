@@ -1,6 +1,6 @@
-<lib-phone-num-picker
+<ngb-phone-picker
   [formField]="phoneForm"
-  [prefferedCountries]="['ua','dk']"></lib-phone-num-picker>
+  [prefferedCountries]="['ua','dk']"></ngb-phone-picker>
 
 <pre>{{phoneForm().value()|json}}</pre>
 
@@ -9,5 +9,3 @@
   (click)="phoneForm().reset()">
   Reset undefined
 </button>
-
-

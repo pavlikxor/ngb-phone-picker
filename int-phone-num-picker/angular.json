@@ -6,7 +6,7 @@
   },
   "newProjectRoot": "projects",
   "projects": {
-    "int-phone-num-picker": {
+    "ngb-phone-picker": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -59,10 +59,10 @@
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "int-phone-num-picker:build:production"
+              "buildTarget": "ngb-phone-picker:build:production"
             },
             "development": {
-              "buildTarget": "int-phone-num-picker:build:development"
+              "buildTarget": "ngb-phone-picker:build:development"
             }
           },
           "defaultConfiguration": "development"

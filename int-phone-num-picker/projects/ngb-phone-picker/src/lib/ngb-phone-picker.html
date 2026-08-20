@@ -1,13 +1,12 @@
-<div class="btn-group">
+<div class="ngb-phone-picker__group">
   <div
-    class="btn-group"
+    dropdownClass="ngb-phone-picker__dropdown"
     ngbDropdown
-    role="group"
-    aria-label="Button group with nested dropdown"
+    aria-label="Dropdown with country code selection"
     (openChange)="dropdownChange($event)">
     <button
       type="button"
-      class="btn int-phone-picker__dropdown-btn"
+      class="btn ngb-phone-picker__dropdown-btn"
       [disabled]="disabled()"
       ngbDropdownToggle>
       @let selectedCountryValue = selectedCountry(); @if (selectedCountryValue)
@@ -23,15 +22,15 @@
     </button>
 
     <div
-      class="dropdown-menu int-phone-picker__container"
+      class="dropdown-menu ngb-phone-picker__container"
       ngbDropdownMenu>
       <input
-        #countrySearch
+        #countrySearchInput
         type="text"
         placeholder="Type country name or code..."
-        class="form-control int-phone-picker__country-input"
+        class="form-control ngb-phone-picker__country-input"
         [formField]="searchCountryForm.query" />
-      <div class="int-phone-picker__options-list">
+      <div class="ngb-phone-picker__options-list">
         @for (country of filteredCountries(); track $index) {
         <button
           ngbDropdownItem
@@ -41,10 +40,10 @@
           <ngb-highlight
             class="country--prefix"
             [result]="'+' + country.countryCode"
-            [term]="searchModel().query"></ngb-highlight>
+            [term]="countrySearch().query"></ngb-highlight>
           <ngb-highlight
             [result]="country.countryName"
-            [term]="searchModel().query"></ngb-highlight>
+            [term]="countrySearch().query"></ngb-highlight>
         </button>
         }
       </div>
@@ -55,19 +54,19 @@
     #phoneInput
     id="phoneInput"
     type="tel"
-    class="form-control int-phone-picker__phone-input"
+    class="form-control ngb-phone-picker__phone-input"
     placeholder="Phone number"
     [formField]="phoneForm.phoneNumber" />
 </div>
 @for(error of phoneForm.phoneNumber().errors(); track $index){
-<div>{{ error.message }}</div>
+<div class="ngb-phone-picker__error">{{ error.message }}</div>
 }
 
 <!-- <form>
   <button
       aria-haspopup="listbox"
       type="button"
-      class="int-phone-picker__dropdown-btn"
+      class="ngb-phone-picker__dropdown-btn"
       matPrefix
       [matMenuTriggerFor]="menu"
       (menuOpened)="onMenuOpened()"
@@ -86,18 +85,18 @@
 
   <ng-template matMenuContent>
         <input
-          #countrySearch
+          #countrySearchInput
           type="text"
           placeholder="Search countries..."
-          class="int-phone-picker__search-input"
+          class="ngb-phone-picker__search-input"
           (click)="$event.stopPropagation()"
           [formField]="searchCountryForm.query" />
-        <div class="int-phone-picker__container">
+        <div class="ngb-phone-picker__container">
           @for (country of filteredCountries(); track $index) {
           <button
             type="button"
             mat-menu-item
-            class="int-phone-picker__country-btn"
+            class="ngb-phone-picker__country-btn"
             (click)="countryCodeSelectClick(country)">
             <span [class]="'country--flag flag:' + country.prefix"></span>
             <span class="country--name">{{ country.countryName }}</span>

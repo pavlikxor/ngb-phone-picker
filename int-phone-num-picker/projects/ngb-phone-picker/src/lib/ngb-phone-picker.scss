@@ -7,26 +7,26 @@
 @import 'bootstrap/scss/root';
 
 @import 'bootstrap/scss/buttons';
-@import 'bootstrap/scss/button-group';
 @import 'bootstrap/scss/dropdown';
 @import 'bootstrap/scss/forms/form-control';
-@import 'bootstrap/scss/utilities';
 
-// Colors - Core
-$white-base: #ffffff;
-$dark-base: #333333;
+ngb-phone-picker {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
 
-// Colors - Gray
-$gray-light: #f7f7f7;
-$gray-base: #cccccc;
-$gray-dark: #8e8e8e;
-
-// Colors - Blue
-$blue-base: #2879c7;
-
-:host {
-  position: relative;
-  display: block;
+  // Ensure all buttons, inputs, dropdown items, and highlights inherit the same font family
+  .ngb-phone-picker__dropdown-btn,
+  .ngb-phone-picker__country-input,
+  .ngb-phone-picker__phone-input,
+  .ngb-phone-picker__error,
+  .country__option,
+  ngb-highlight {
+    font: {
+      family: inherit;
+      size: 1rem;
+    }
+  }
 }
 
 .country {
@@ -39,7 +39,7 @@ $blue-base: #2879c7;
     min-height: 35px;
   }
   &--flag {
-    border: 0.3px solid $gray-base;
+    border: 0.3px solid var(--bs-gray-400);
   }
   &--prefix {
     display: inline-block;
@@ -47,13 +47,23 @@ $blue-base: #2879c7;
   }
 }
 
-.int-phone-picker {
-  &__dropdown-btn {
-    border: var(--bs-border-width) solid var(--bs-border-color);
-    display:flex;
+.ngb-phone-picker {
+  &__group {
+    display: flex;
     align-items: center;
-    font-size: 110%;
-    color: var(--bs-body-color);
+    flex-wrap: nowrap;
+  }
+  &__dropdown-btn {
+    display: flex;
+    align-items: center;
+    border: {
+      width: var(--bs-border-width);
+      style: solid;
+      color: var(--bs-border-color);
+      top-right-radius: 0;
+      bottom-right-radius: 0;
+    }
+
     &:hover {
       border: var(--bs-border-width) solid var(--bs-border-color);
     }
@@ -63,6 +73,7 @@ $blue-base: #2879c7;
     box-sizing: border-box;
   }
   &__phone-input {
+    width: auto;
     border: {
       top-left-radius: 0;
       bottom-left-radius: 0;
@@ -74,11 +85,14 @@ $blue-base: #2879c7;
       bottom: 0;
     }
   }
+  &__error {
+    color: var(--bs-danger);
+  }
   &__options-list {
     overflow-y: auto;
     overflow-x: hidden;
     max-height: 400px;
-    scrollbar-color: $gray-base transparent;
+    scrollbar-color: var(--bs-gray-400) transparent;
     scrollbar-width: thin;
 
     &::-webkit-scrollbar {
@@ -90,12 +104,12 @@ $blue-base: #2879c7;
     }
 
     &::-webkit-scrollbar-thumb {
-      background-color: $gray-base;
+      background-color: var(--bs-gray-400);
       border-radius: 3px;
-      border: 2px solid $white-base;
+      border: 2px solid var(--bs-white);
 
       &:hover {
-        background-color: $gray-dark;
+        background-color: var(--bs-gray-700);
       }
     }
   }
