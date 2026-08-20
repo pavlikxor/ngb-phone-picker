@@ -1,7 +1,10 @@
 import { JsonPipe } from '@angular/common';
 import { Component, signal } from '@angular/core';
-import { form, FormField } from '@angular/forms/signals';
-import { PhoneNumPicker } from '../../projects/phone-num-picker/src/public-api';
+import { disabled, form, FormField } from '@angular/forms/signals';
+import {
+  PhoneNumberModel,
+  PhoneNumPicker,
+} from '../../projects/phone-num-picker/src/public-api';
 
 @Component({
   selector: 'app-root',
@@ -12,9 +15,14 @@ import { PhoneNumPicker } from '../../projects/phone-num-picker/src/public-api';
 export class App {
   protected readonly title = signal('int-phone-num-picker');
 
-  phone = signal({
-    number: null,
+  phone = signal<PhoneNumberModel>({
+    //number: null,
+
+    countryCode: 380,
+    phoneNumber: 679438810,
   });
 
-  phoneForm = form(this.phone);
+  phoneForm = form(this.phone, schemaPath => {
+    disabled(schemaPath, { when: () => !true });
+  });
 }

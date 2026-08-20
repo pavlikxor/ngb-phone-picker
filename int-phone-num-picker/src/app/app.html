@@ -1,5 +1,13 @@
 <lib-phone-num-picker
-  [formField]="phoneForm.number"
-  [prefferedCountries]="['ua','au']"></lib-phone-num-picker>
+  [formField]="phoneForm"
+  [prefferedCountries]="['ua','dk']"></lib-phone-num-picker>
 
 <pre>{{phoneForm().value()|json}}</pre>
+
+<button
+  type="button"
+  (click)="phoneForm().reset()">
+  Reset undefined
+</button>
+
+

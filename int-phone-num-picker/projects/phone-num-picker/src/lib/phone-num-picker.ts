@@ -18,9 +18,15 @@ import {
   FormValueControl,
   validate,
 } from '@angular/forms/signals';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInput, MatInputModule } from '@angular/material/input';
-import { MatMenuModule } from '@angular/material/menu';
+
+import {
+  NgbDropdown,
+  NgbDropdownButtonItem,
+  NgbDropdownItem,
+  NgbDropdownMenu,
+  NgbDropdownToggle,
+  NgbHighlight,
+} from '@ng-bootstrap/ng-bootstrap';
 import {
   getCountryCodeForRegionCode,
   getSupportedRegionCodes,
@@ -41,7 +47,15 @@ export type PhoneNumberModel = {
 
 @Component({
   selector: 'lib-phone-num-picker',
-  imports: [FormField, MatFormFieldModule, MatInputModule, MatMenuModule],
+  imports: [
+    FormField,
+    NgbHighlight,
+    NgbDropdown,
+    NgbDropdownToggle,
+    NgbDropdownMenu,
+    NgbDropdownItem,
+    NgbDropdownButtonItem,
+  ],
   templateUrl: './phone-num-picker.html',
   styleUrl: './phone-num-picker.scss',
   encapsulation: ViewEncapsulation.None,
@@ -72,7 +86,7 @@ export class PhoneNumPicker implements FormValueControl<PhoneNumberModel> {
     this.selectedCountry.update(() => undefined);
     this.phoneNumber.update(() => ({ phoneNumber: '' }));
     this.phoneForm().reset(undefined);
-    this.serchCountryForm().reset(undefined);
+    this.searchCountryForm().reset(undefined);
     this.searchModel.update(() => ({ query: '' }));
   }
   private regionNameService = inject(RegionNameService);
@@ -156,24 +170,27 @@ export class PhoneNumPicker implements FormValueControl<PhoneNumberModel> {
     query: '',
   });
 
-  protected readonly serchCountryForm = form(this.searchModel, schemaPath => {
+  protected readonly searchCountryForm = form(this.searchModel, schemaPath => {
     debounce(schemaPath.query, 100);
   });
 
   countrySearch =
     viewChild.required<ElementRef<HTMLInputElement>>('countrySearch');
 
-  phoneInput = viewChild.required<ElementRef<MatInput>>('phoneInput');
+  phoneInput = viewChild.required<ElementRef<HTMLInputElement>>('phoneInput');
 
-  onMenuOpened(): void {
-    this.countrySearch().nativeElement.focus();
+  dropdownChange(isOpened: boolean): void {
+    isOpened
+      ? requestAnimationFrame(() => {
+          const countrySearchInput = this.countrySearch()?.nativeElement;
+          if (countrySearchInput) {
+            countrySearchInput.focus();
+          }
+        })
+      : this.phoneInput().nativeElement.focus();
   }
 
-  onMenuClosed(): void {
-    this.phoneInput().nativeElement.focus();
-  }
-
-  countryCodeSelectClick(country: CountryOption) {
+  countryOptionClick(country: CountryOption) {
     this.selectedCountry.update(() => country);
     this.searchModel.update(() => ({ query: '' }));
   }
@@ -187,10 +204,9 @@ export class PhoneNumPicker implements FormValueControl<PhoneNumberModel> {
         selectedCountry && isPhoneFormValid && phoneNumber
           ? {
               countryCode: selectedCountry.countryCode,
-              phoneNumber: parseInt(phoneNumber, 10),
+              phoneNumber: parseInt(phoneNumber.replace(/\D/g, ''), 10)
             }
           : null;
-      console.log('PhoneNumPicker value updated:', value);
       this.value.set(value);
     });
   }
