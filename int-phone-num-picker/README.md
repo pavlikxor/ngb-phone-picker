@@ -1,59 +1,45 @@
 # IntNgbPhonePicker
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.20.
+Angular-based phone number picker demo app with a library package for reusable country selection and validation.
 
-## Development server
+## Local development
 
-To start a local development server, run:
-
-```bash
-ng serve
-```
-
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+Start the app:
 
 ```bash
-ng generate component component-name
+npm start
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+The app serves locally on `http://localhost:4200/`.
+
+## Build
+
+Generate the production bundle:
 
 ```bash
-ng generate --help
+npm run build
 ```
 
-## Building
+## Run tests
 
-To build the project run:
+This project uses [Vitest](https://vitest.dev/) for unit tests.
 
 ```bash
-ng build
+npm run test
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+Watch mode:
 
 ```bash
-ng test
+npm run test:watch
 ```
 
-## Running end-to-end tests
+## Project structure
 
-For end-to-end (e2e) testing, run:
+- `src/app` — demo application
+- `projects/ngb-phone-picker/src/lib` — reusable phone picker component and related logic
+- `projects/phone-num-picker` — library package project
 
-```bash
-ng e2e
-```
+## Notes
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+The project is built around Angular signals and the `@angular/forms/signals` API, with custom country filtering and highlighting logic for the search list.

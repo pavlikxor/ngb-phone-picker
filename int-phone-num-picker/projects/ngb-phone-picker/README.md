@@ -1,64 +1,44 @@
 # NgbPhonePicker
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.0.
+Standalone Angular phone picker component built with signals and debounced country filtering.
 
-## Code scaffolding
+## Features
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+- country selection via dropdown
+- localized region names
+- search by country name, prefix, or code
+- query highlighting for matching text
+- form integration with `@angular/forms/signals`
 
-```bash
-ng generate component component-name
-```
+## Development
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the library, run:
+From the repo root, run:
 
 ```bash
-ng build phone-num-picker
+npm install
+npm start
 ```
 
-This command will compile your project, and the build artifacts will be placed in the `dist/` directory.
-
-### Publishing the Library
-
-Once the project is built, you can publish your library by following these steps:
-
-1. Navigate to the `dist` directory:
-
-   ```bash
-   cd dist/phone-num-picker
-   ```
-
-2. Run the `npm publish` command to publish your library to the npm registry:
-   ```bash
-   npm publish
-   ```
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+## Build
 
 ```bash
-ng test
+npm run build
 ```
 
-## Running end-to-end tests
+## Test
 
-For end-to-end (e2e) testing, run:
+This package uses [Vitest](https://vitest.dev/) for unit tests:
 
 ```bash
-ng e2e
+npm run test
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+For an interactive watch session:
 
-## Additional Resources
+```bash
+npm run test:watch
+```
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+## Notes
+
+The component exposes a clear public phone model shape and keeps the selected country / emitted value transitions consistent while filtering on the debounced search query.

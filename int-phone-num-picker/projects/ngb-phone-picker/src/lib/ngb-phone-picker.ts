@@ -55,7 +55,7 @@ function escapeRegExp(value: string): string {
   return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
-function buildHighlightedSegments(
+export function buildHighlightedSegments(
   value: string,
   query: string,
 ): HighlightedSegment[] {
@@ -67,9 +67,9 @@ function buildHighlightedSegments(
   }
 
   const regex = new RegExp(`(${escapeRegExp(trimmedQuery)})`, 'ig');
-  const parts = safeValue.split(regex).filter(
-    part => part.length > 0 || safeValue === '',
-  );
+  const parts = safeValue
+    .split(regex)
+    .filter(part => part.length > 0 || safeValue === '');
 
   return parts.map(part => ({
     text: part,
@@ -103,7 +103,6 @@ export class NgbPhonePicker implements FormValueControl<PhoneNumberValue> {
   disabled = input(false);
   required = input(false);
 
-  // --- Inputs ---
   region = input<string | undefined>();
   prefferedCountries = input<string[] | undefined>();
 
@@ -124,12 +123,18 @@ export class NgbPhonePicker implements FormValueControl<PhoneNumberValue> {
     });
   });
 
+  private countryQuery = computed(() => {
+    const debouncedQuery = this.searchCountryForm.query().value() ?? '';
+    const rawQuery = this.countrySearch().query ?? '';
+    return (debouncedQuery || rawQuery).trim();
+  });
+
   filteredCountries = computed<CountryOptionWithHighlighting[]>(() => {
     const options = this.countryOptions();
     const preferred = (this.prefferedCountries() || []).map(c =>
       c.toUpperCase(),
     );
-    const query = (this.countrySearch().query ?? '').trim();
+    const query = this.countryQuery();
     const normalizedQuery = query.toUpperCase();
 
     const matchesQuery = (o: CountryOption) =>
@@ -160,7 +165,7 @@ export class NgbPhonePicker implements FormValueControl<PhoneNumberValue> {
 
   selectedCountry = signal<CountryOption | undefined>(undefined);
 
-  phoneNumber = signal({
+  private phoneNumber = signal({
     phoneNumber: '',
   });
 
@@ -186,7 +191,7 @@ export class NgbPhonePicker implements FormValueControl<PhoneNumberValue> {
     });
   });
 
-  countrySearch = signal({
+  private countrySearch = signal({
     query: '',
   });
 
@@ -232,7 +237,8 @@ export class NgbPhonePicker implements FormValueControl<PhoneNumberValue> {
       }
       return;
     }
-
+    const parsedNumber = parsePhoneNumber(`+${parentVal.countryCode}${parentVal.phoneNumber}`);
+    console.log(parsedNumber);
     const matchedCountry = this.countryOptions().find(
       c => c.countryCode === parentVal.countryCode,
     );
@@ -288,6 +294,7 @@ export class NgbPhonePicker implements FormValueControl<PhoneNumberValue> {
   constructor() {
     effect(() => {
       const parentVal = this.value();
+      console.log(parentVal);
       untracked(() => this.syncSelectionFromValue(parentVal));
     });
 

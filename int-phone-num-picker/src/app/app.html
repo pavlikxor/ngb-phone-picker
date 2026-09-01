@@ -1,11 +1,46 @@
-<ngb-phone-picker
-  [formField]="phoneForm"
-  [prefferedCountries]="['ua','dk']"></ngb-phone-picker>
+<main class="demo-page">
+  <section class="demo-card">
+    <p class="eyebrow">Library demo</p>
+    <h1>{{ title }}</h1>
+    <p class="description">
+      Pick a country, search by name or code, and validate the entered phone
+      number in real time.
+    </p>
 
-<pre>{{phoneForm().value()|json}}</pre>
+    <div class="demo-controls">
+      <button
+        type="button"
+        class="demo-button demo-button--primary"
+        (click)="setDemo({ countryCode: 45, phoneNumber: '26668888' })">
+        Denmark example
+      </button>
+      <button
+        type="button"
+        class="demo-button"
+        (click)="setDemo({ countryCode: 380, phoneNumber: '501234567' })">
+        Ukraine example
+      </button>
+      <button
+        type="button"
+        class="demo-button"
+        (click)="setDemo({ countryCode: 1, phoneNumber: '4155552671' })">
+        US example
+      </button>
+      <button
+        type="button"
+        class="demo-button demo-button--ghost"
+        (click)="resetDemo()">
+        Reset
+      </button>
+    </div>
 
-<button
-  type="button"
-  (click)="phoneForm().reset()">
-  Reset undefined
-</button>
+    <ngb-phone-picker
+      [(value)]="phone"
+      [prefferedCountries]="preferredCountries"></ngb-phone-picker>
+
+    <div class="value-panel">
+      <h2>Current value</h2>
+      <pre>{{ phone() | json }}</pre>
+    </div>
+  </section>
+</main>
