@@ -8,7 +8,61 @@ Standalone Angular phone picker component built with signals and debounced count
 - localized region names
 - search by country name, prefix, or code
 - query highlighting for matching text
-- form integration with `@angular/forms/signals`
+- ready for Angular forms in Reactive, Template-driven, and Signal-based patterns
+
+## Form usage
+
+This component is designed to work with Angular forms in all three common styles:
+
+- Reactive forms via `formControl`
+- Template-driven forms via `ngModel`
+- Signal-based forms via `formField`
+
+Example usage with a reactive form:
+
+```ts
+import { FormControl, FormGroup } from "@angular/forms";
+
+phoneControl = new FormControl({
+  countryCode: 1,
+  phoneNumber: "5551234567",
+});
+```
+
+```html
+<ngb-phone-picker [formControl]="phoneControl"></ngb-phone-picker>
+```
+
+Example usage with a signal-based form field:
+
+```ts
+import { signal } from '@angular/core';
+import { form, FormField } from '@angular/forms/signals';
+
+preferredCountries = ['ua', 'dk', 'us', 'de'];
+
+phone = signal<PhoneNumberModel | null>({
+    countryCode: 45,
+    phoneNumber: '26668888',
+  });
+
+phoneForm = form(this.phone);
+```
+
+```html
+<ngb-phone-picker [formField]="phoneForm.phone"></ngb-phone-picker>
+```
+
+This is the correct Signal Forms pattern for custom controls like `ngb-phone-picker`, because it implements the `FormValueControl` contract and can be bound directly to a `Field` via `formField`.
+
+The component exposes a stable phone value model shaped as:
+
+```ts
+{
+  countryCode: number;
+  phoneNumber: string;
+}
+```
 
 ## Development
 

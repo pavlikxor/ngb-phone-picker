@@ -1,6 +1,6 @@
 {
   "name": "ngb-phone-picker",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "peerDependencies": {
     "@angular/common": "^22.1.1",
     "@angular/core": "^22.1.1",
@@ -13,5 +13,32 @@
   "dependencies": {
     "tslib": "^2.8.1"
   },
-  "sideEffects": false
+  "sideEffects": false,
+  "license": "MIT",
+  "keywords": [
+    "angular",
+    "ng-bootstrap",
+    "phone-number",
+    "phone-input",
+    "phone-picker",
+    "international-phone-number",
+    "country-code-picker",
+    "telephony",
+    "form-control",
+    "angular-signals",
+    "ngx-phone-number",
+    "lib-phone-picker",
+    "phone number picker",
+    "phone number select",
+    "international phone number"
+  ],
+  "description": "International phone number picker for Angular using ng-bootstrap and awesome-phonenumber",
+  "homepage": "https://pavlikxor.github.io/ngb-phone-picker/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pavlikxor/ngb-phone-picker.git"
+  },
+  "bugs": {
+    "url": "https://github.com/pavlikxor/ngb-phone-picker/issues"
+  }
 }

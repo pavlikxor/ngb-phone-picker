@@ -1,5 +1,6 @@
 import { JsonPipe } from '@angular/common';
 import { Component, signal } from '@angular/core';
+import { form, FormField } from '@angular/forms/signals';
 import {
   NgbPhonePicker,
   PhoneNumberModel,
@@ -7,7 +8,7 @@ import {
 
 @Component({
   selector: 'app-root',
-  imports: [NgbPhonePicker, JsonPipe],
+  imports: [NgbPhonePicker, JsonPipe, FormField],
   templateUrl: './app.html',
   styleUrl: './app.scss',
 })
@@ -20,6 +21,8 @@ export class App {
     countryCode: 45,
     phoneNumber: '26668888',
   });
+
+  readonly phoneForm = form(this.phone);
 
   setDemo(example: PhoneNumberModel): void {
     this.phone.set(example);
