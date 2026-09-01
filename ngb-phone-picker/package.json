@@ -1,11 +1,11 @@
 {
   "name": "ngb-phone-picker",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "scripts": {
     "ng": "ng",
     "start": "ng serve ngb-phone-picker-demo",
     "build": "ng build ngb-phone-picker --configuration production",
-    "build:demo": "ng build ngb-phone-picker-demo --configuration production",
+    "build:demo": "ng build ngb-phone-picker-demo --configuration production --base-href /ngb-phone-picker/",
     "watch": "ng build ngb-phone-pickerbuild ngb-phone-picker-demo --configuration production",
     "test": "vitest run",
     "test:watch": "vitest"
