@@ -33,6 +33,7 @@ import {
   getSupportedRegionCodes,
   parsePhoneNumber,
 } from 'awesome-phonenumber';
+import { buildPhoneValidationMessage } from './phone-validation';
 import { RegionNameService } from './region-names';
 
 interface CountryOption {
@@ -172,11 +173,16 @@ export class NgbPhonePicker implements FormValueControl<PhoneNumberValue> {
   phoneForm = form(this.phoneNumber, schemaPath => {
     disabled(schemaPath, { when: () => this.disabled() });
     pattern(schemaPath.phoneNumber, /^[0-9\- ]+$/, {
-      message: 'Only digits, spaces, and dashes allowed',
+      message: buildPhoneValidationMessage(
+        this.selectedCountry()?.countryName,
+        this.phoneNumber().phoneNumber,
+      ),
     });
     validate(schemaPath.phoneNumber, ({ value }) => {
       const inputValue = value();
       const prefix = this.selectedCountry()?.prefix;
+      const countryName = this.selectedCountry()?.countryName;
+
       if (!inputValue || !prefix) {
         return null;
       }
@@ -186,7 +192,7 @@ export class NgbPhonePicker implements FormValueControl<PhoneNumberValue> {
         ? null
         : {
             kind: 'invalidPhoneNumber',
-            message: `Invalid phone number for ${this.selectedCountry()?.countryName}`,
+            message: buildPhoneValidationMessage(countryName, inputValue),
           };
     });
   });
@@ -232,15 +238,16 @@ export class NgbPhonePicker implements FormValueControl<PhoneNumberValue> {
 
   private syncSelectionFromValue(parentVal: PhoneNumberValue): void {
     if (!parentVal) {
-      if (!this.selectedCountry()) {
-        this.phoneNumber.set({ phoneNumber: '' });
-      }
+      this.reset();
       return;
     }
-    const parsedNumber = parsePhoneNumber(`+${parentVal.countryCode}${parentVal.phoneNumber}`);
-    console.log(parsedNumber);
+    const parsedNumber = parsePhoneNumber(
+      `+${parentVal.countryCode}${parentVal.phoneNumber}`,
+    );
     const matchedCountry = this.countryOptions().find(
-      c => c.countryCode === parentVal.countryCode,
+      c =>
+        c.countryCode === parentVal.countryCode &&
+        c.prefix.toUpperCase() === parsedNumber.regionCode?.toUpperCase(),
     );
 
     if (
@@ -294,7 +301,6 @@ export class NgbPhonePicker implements FormValueControl<PhoneNumberValue> {
   constructor() {
     effect(() => {
       const parentVal = this.value();
-      console.log(parentVal);
       untracked(() => this.syncSelectionFromValue(parentVal));
     });
 

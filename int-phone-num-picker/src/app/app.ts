@@ -25,10 +25,7 @@ export class App {
     this.phone.set(example);
   }
 
-  resetDemo(): void {
-    this.phone.set({
-      countryCode: 45,
-      phoneNumber: '26668888',
-    });
+  clearDemo(): void {
+    this.phone.set(null);
   }
 }
