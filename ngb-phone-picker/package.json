@@ -3,9 +3,10 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
-    "build": "ng build",
-    "watch": "ng build --watch --configuration development",
+    "start": "ng serve ngb-phone-picker-demo",
+    "build": "ng build ngb-phone-picker --configuration production",
+    "build:demo": "ng build ngb-phone-picker-demo --configuration production",
+    "watch": "ng build ngb-phone-pickerbuild ngb-phone-picker-demo --configuration production",
     "test": "vitest run",
     "test:watch": "vitest"
   },

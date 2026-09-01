@@ -2,11 +2,11 @@
 
 ## Project shape
 
-- The app and library live under the nested folder `int-phone-num-picker/`.
+- The app and library live under the nested folder `int-ngb-phone-picker/`.
 - Main scripts: `npm start`, `npm run build`, `npm test`, and `npm run test:watch`.
 - The demo app is under `src/app`.
 - The reusable component is under `projects/ngb-phone-picker/src/lib`.
-- Keep changes consistent with the actual `ngb-phone-picker` package, not older `phone-num-picker` naming.
+- Keep changes consistent with the actual `ngb-phone-picker` package, not older `ngb-phone-picker` naming.
 
 ## Coding conventions
 

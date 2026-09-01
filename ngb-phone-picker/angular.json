@@ -6,7 +6,7 @@
   },
   "newProjectRoot": "projects",
   "projects": {
-    "ngb-phone-picker": {
+    "ngb-phone-picker-demo": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -59,10 +59,10 @@
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "ngb-phone-picker:build:production"
+              "buildTarget": "ngb-phone-picker-demo:build:production"
             },
             "development": {
-              "buildTarget": "ngb-phone-picker:build:development"
+              "buildTarget": "ngb-phone-picker-demo:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -72,20 +72,20 @@
         }
       }
     },
-    "phone-num-picker": {
+    "ngb-phone-picker": {
       "projectType": "library",
-      "root": "projects/phone-num-picker",
-      "sourceRoot": "projects/phone-num-picker/src",
+      "root": "projects/ngb-phone-picker",
+      "sourceRoot": "projects/ngb-phone-picker/src",
       "prefix": "lib",
       "architect": {
         "build": {
           "builder": "@angular/build:ng-packagr",
           "configurations": {
             "production": {
-              "tsConfig": "projects/phone-num-picker/tsconfig.lib.prod.json"
+              "tsConfig": "projects/ngb-phone-picker/tsconfig.lib.prod.json"
             },
             "development": {
-              "tsConfig": "projects/phone-num-picker/tsconfig.lib.json"
+              "tsConfig": "projects/ngb-phone-picker/tsconfig.lib.json"
             }
           },
           "defaultConfiguration": "production"
@@ -93,7 +93,7 @@
         "test": {
           "builder": "@angular/build:unit-test",
           "options": {
-            "tsConfig": "projects/phone-num-picker/tsconfig.spec.json"
+            "tsConfig": "projects/ngb-phone-picker/tsconfig.spec.json"
           }
         }
       }

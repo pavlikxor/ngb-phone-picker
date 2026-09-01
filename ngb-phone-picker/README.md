@@ -38,7 +38,7 @@ npm run test:watch
 
 - `src/app` — demo application
 - `projects/ngb-phone-picker/src/lib` — reusable phone picker component and related logic
-- `projects/phone-num-picker` — library package project
+- `projects/ngb-phone-picker` — library package project
 
 ## Notes
 

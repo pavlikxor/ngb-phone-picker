@@ -1,5 +1,5 @@
 /*
- * Public API Surface of phone-num-picker
+ * Public API Surface of ngb-phone-picker
  */
 
 export * from './lib/ngb-phone-picker';

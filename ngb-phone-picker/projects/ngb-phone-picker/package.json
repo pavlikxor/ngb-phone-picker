@@ -1,16 +1,16 @@
 {
-  "name": "phone-num-picker",
-  "version": "0.0.1",
+  "name": "ngb-phone-picker",
+  "version": "1.0.0",
   "peerDependencies": {
     "@angular/common": "^22.1.1",
-    "@angular/core": "^22.1.1"
-  },
-  "dependencies": {
+    "@angular/core": "^22.1.1",
     "@ng-bootstrap/ng-bootstrap": "^21.0.0",
     "@popperjs/core": "^2.11.8",
     "bootstrap": "^5.3.3",
     "awesome-phonenumber": "^7.8.0",
-    "country-flag-icons": "^1.6.20",
+    "country-flag-icons": "^1.6.20"
+  },
+  "dependencies": {
     "tslib": "^2.8.1"
   },
   "sideEffects": false

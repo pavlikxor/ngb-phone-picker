@@ -12,7 +12,7 @@
     "isolatedModules": true,
     "experimentalDecorators": true,
     "paths": {
-      "phone-num-picker": ["./dist/phone-num-picker"]
+      "ngb-phone-picker": ["./dist/ngb-phone-picker"]
     },
     "importHelpers": true,
     "target": "ES2022",
@@ -33,10 +33,10 @@
       "path": "./tsconfig.spec.json"
     },
     {
-      "path": "./projects/phone-num-picker/tsconfig.lib.json"
+      "path": "./projects/ngb-phone-picker/tsconfig.lib.json"
     },
     {
-      "path": "./projects/phone-num-picker/tsconfig.spec.json"
+      "path": "./projects/ngb-phone-picker/tsconfig.spec.json"
     }
   ]
 }
