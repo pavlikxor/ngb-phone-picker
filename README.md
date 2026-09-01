@@ -21,7 +21,7 @@ This component is designed to work with Angular forms in all three common styles
 Example usage with a reactive form:
 
 ```ts
-import { FormControl, FormGroup } from "@angular/forms";
+import { FormControl } from "@angular/forms";
 
 phoneControl = new FormControl({
   countryCode: 1,
