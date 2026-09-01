@@ -27,7 +27,6 @@ import {
   NgbDropdownItem,
   NgbDropdownMenu,
   NgbDropdownToggle,
-  NgbHighlight,
 } from '@ng-bootstrap/ng-bootstrap';
 import {
   getCountryCodeForRegionCode,
@@ -42,6 +41,42 @@ interface CountryOption {
   countryName: string;
 }
 
+interface CountryOptionWithHighlighting extends CountryOption {
+  prefixSegments: HighlightedSegment[];
+  nameSegments: HighlightedSegment[];
+}
+
+interface HighlightedSegment {
+  text: string;
+  isMatch: boolean;
+}
+
+function escapeRegExp(value: string): string {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+function buildHighlightedSegments(
+  value: string,
+  query: string,
+): HighlightedSegment[] {
+  const safeValue = value ?? '';
+  const trimmedQuery = (query ?? '').trim();
+
+  if (!trimmedQuery) {
+    return [{ text: safeValue, isMatch: false }];
+  }
+
+  const regex = new RegExp(`(${escapeRegExp(trimmedQuery)})`, 'ig');
+  const parts = safeValue.split(regex).filter(
+    part => part.length > 0 || safeValue === '',
+  );
+
+  return parts.map(part => ({
+    text: part,
+    isMatch: part.toLowerCase() === trimmedQuery.toLowerCase(),
+  }));
+}
+
 export type PhoneNumberModel = {
   countryCode: number;
   phoneNumber: number;
@@ -51,7 +86,6 @@ export type PhoneNumberModel = {
   selector: 'ngb-phone-picker',
   imports: [
     FormField,
-    NgbHighlight,
     NgbDropdown,
     NgbDropdownToggle,
     NgbDropdownMenu,
@@ -63,7 +97,7 @@ export type PhoneNumberModel = {
   encapsulation: ViewEncapsulation.None,
 })
 export class NgbPhonePicker implements FormValueControl<PhoneNumberModel> {
-  // --- FormValueControl API ---
+
   value = model<PhoneNumberModel>(null);
   disabled = input(false);
   required = input(false);
@@ -89,18 +123,19 @@ export class NgbPhonePicker implements FormValueControl<PhoneNumberModel> {
     });
   });
 
-  filteredCountries = computed(() => {
+  filteredCountries = computed<CountryOptionWithHighlighting[]>(() => {
     const options = this.countryOptions();
     const preferred = (this.prefferedCountries() || []).map(c =>
       c.toUpperCase(),
     );
-    const query = (this.countrySearch().query ?? '').trim().toUpperCase();
+    const query = (this.countrySearch().query ?? '').trim();
+    const normalizedQuery = query.toUpperCase();
 
     const matchesQuery = (o: CountryOption) =>
-      !query ||
-      o.countryName.toUpperCase().includes(query) ||
-      o.prefix.toUpperCase().includes(query) ||
-      o.countryCode.toString().includes(query);
+      !normalizedQuery ||
+      o.countryName.toUpperCase().includes(normalizedQuery) ||
+      o.prefix.toUpperCase().includes(normalizedQuery) ||
+      o.countryCode.toString().includes(normalizedQuery);
 
     const preferredOptions = options.filter(
       o => preferred.includes(o.prefix.toUpperCase()) && matchesQuery(o),
@@ -112,7 +147,14 @@ export class NgbPhonePicker implements FormValueControl<PhoneNumberModel> {
       )
       .sort((a, b) => a.countryName.localeCompare(b.countryName));
 
-    return [...preferredOptions, ...otherOptions];
+    return [...preferredOptions, ...otherOptions].map(country => ({
+      ...country,
+      prefixSegments: buildHighlightedSegments(
+        '+' + country.countryCode,
+        query,
+      ),
+      nameSegments: buildHighlightedSegments(country.countryName, query),
+    }));
   });
 
   selectedCountry = signal<CountryOption | undefined>(undefined);
@@ -195,7 +237,6 @@ export class NgbPhonePicker implements FormValueControl<PhoneNumberModel> {
           return;
         }
 
-        // Match country by countryCode
         const matchedCountry = this.countryOptions().find(
           c => c.countryCode === parentVal.countryCode,
         );

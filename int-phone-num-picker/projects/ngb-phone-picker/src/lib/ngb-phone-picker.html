@@ -37,13 +37,24 @@
           class="country__option"
           (click)="countryOptionClick(country)">
           <span [class]="'country--flag flag:' + country.prefix"></span>
-          <ngb-highlight
-            class="country--prefix"
-            [result]="'+' + country.countryCode"
-            [term]="countrySearch().query"></ngb-highlight>
-          <ngb-highlight
-            [result]="country.countryName"
-            [term]="countrySearch().query"></ngb-highlight>
+          <span class="country--prefix">
+            @for (segment of country.prefixSegments; track $index) {
+              @if (segment.isMatch) {
+                <mark class="country--match">{{ segment.text }}</mark>
+              } @else {
+                <span>{{ segment.text }}</span>
+              }
+            }
+          </span>
+          <span class="country--name">
+            @for (segment of country.nameSegments; track $index) {
+              @if (segment.isMatch) {
+                <mark class="country--match">{{ segment.text }}</mark>
+              } @else {
+                <span>{{ segment.text }}</span>
+              }
+            }
+          </span>
         </button>
         }
       </div>
@@ -61,52 +72,3 @@
 @for(error of phoneForm.phoneNumber().errors(); track $index){
 <div class="ngb-phone-picker__error">{{ error.message }}</div>
 }
-
-<!-- <form>
-  <button
-      aria-haspopup="listbox"
-      type="button"
-      class="ngb-phone-picker__dropdown-btn"
-      matPrefix
-      [matMenuTriggerFor]="menu"
-      (menuOpened)="onMenuOpened()"
-      (menuClosed)="onMenuClosed()"
-      [class.empty]="!selectedCountry()"
-      [disabled]="disabled()">
-      @let selectedCountryValue = selectedCountry(); @if (selectedCountryValue)
-      {
-      <span
-        [class]="'country--flag flag:' + selectedCountryValue.prefix"></span>
-      <span class="country--prefix">+{{ selectedCountryValue.countryCode }}</span>
-      }@else {
-      <span class="dropdown-label">Select Country</span>
-      }
-    </button>
-
-  <ng-template matMenuContent>
-        <input
-          #countrySearchInput
-          type="text"
-          placeholder="Search countries..."
-          class="ngb-phone-picker__search-input"
-          (click)="$event.stopPropagation()"
-          [formField]="searchCountryForm.query" />
-        <div class="ngb-phone-picker__container">
-          @for (country of filteredCountries(); track $index) {
-          <button
-            type="button"
-            mat-menu-item
-            class="ngb-phone-picker__country-btn"
-            (click)="countryCodeSelectClick(country)">
-            <span [class]="'country--flag flag:' + country.prefix"></span>
-            <span class="country--name">{{ country.countryName }}</span>
-          </button>
-          }
-        </div>
-      </ng-template>
-
-  <input
-    type="text"
-    #phoneInput
-    [formField]="phoneForm.phoneNumber" />  
-</form> -->

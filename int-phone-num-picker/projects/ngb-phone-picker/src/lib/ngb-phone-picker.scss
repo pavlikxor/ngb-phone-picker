@@ -21,7 +21,9 @@ ngb-phone-picker {
   .ngb-phone-picker__phone-input,
   .ngb-phone-picker__error,
   .country__option,
-  ngb-highlight {
+  .country--prefix,
+  .country--name,
+  .country--match {
     font: {
       family: inherit;
       size: 1rem;
@@ -45,6 +47,14 @@ ngb-phone-picker {
     display: inline-block;
     min-width: 30px;
   }
+
+  &--match {
+    background: rgba(var(--bs-warning-rgb), 0.25);
+    color: inherit;
+    padding: 0 0.08em;
+    border-radius: 0.2em;
+    font-weight: 700;
+  }
 }
 
 .ngb-phone-picker {
@@ -56,6 +66,8 @@ ngb-phone-picker {
   &__dropdown-btn {
     display: flex;
     align-items: center;
+    justify-content: space-between;
+    gap: 3px;
     border: {
       width: var(--bs-border-width);
       style: solid;
