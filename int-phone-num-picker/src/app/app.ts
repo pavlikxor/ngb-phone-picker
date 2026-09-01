@@ -16,10 +16,8 @@ export class App {
   protected readonly title = signal('ngb-phone-picker');
 
   phone = signal<PhoneNumberModel>({
-    //number: null,
-
     countryCode: 45,
-    phoneNumber: 26668888,
+    phoneNumber: '26668888',
   });
 
   phoneForm = form(this.phone, schemaPath => {

@@ -77,10 +77,12 @@ function buildHighlightedSegments(
   }));
 }
 
-export type PhoneNumberModel = {
+export interface PhoneNumberModel {
   countryCode: number;
-  phoneNumber: number;
-} | null;
+  phoneNumber: string;
+}
+
+export type PhoneNumberValue = PhoneNumberModel | null;
 
 @Component({
   selector: 'ngb-phone-picker',
@@ -96,9 +98,8 @@ export type PhoneNumberModel = {
   styleUrl: './ngb-phone-picker.scss',
   encapsulation: ViewEncapsulation.None,
 })
-export class NgbPhonePicker implements FormValueControl<PhoneNumberModel> {
-
-  value = model<PhoneNumberModel>(null);
+export class NgbPhonePicker implements FormValueControl<PhoneNumberValue> {
+  value = model<PhoneNumberValue>(null);
   disabled = input(false);
   required = input(false);
 
@@ -248,9 +249,7 @@ export class NgbPhonePicker implements FormValueControl<PhoneNumberModel> {
           this.selectedCountry.set(matchedCountry);
         }
 
-        const phoneStr = parentVal.phoneNumber
-          ? parentVal.phoneNumber.toString()
-          : '';
+        const phoneStr = parentVal.phoneNumber ?? '';
         if (this.phoneNumber().phoneNumber !== phoneStr) {
           this.phoneNumber.set({ phoneNumber: phoneStr });
         }
@@ -267,18 +266,16 @@ export class NgbPhonePicker implements FormValueControl<PhoneNumberModel> {
         if (selectedCountry && isPhoneFormValid && phoneNumber) {
           const cleanPhoneStr = phoneNumber.replace(/\D/g, '');
           if (cleanPhoneStr) {
-            const parsedNumber = parseInt(cleanPhoneStr, 10);
             const currentVal = this.value();
 
-            // Avoid triggering redundant updates if values are identical
             if (
               !currentVal ||
               currentVal.countryCode !== selectedCountry.countryCode ||
-              currentVal.phoneNumber !== parsedNumber
+              currentVal.phoneNumber !== cleanPhoneStr
             ) {
               this.value.set({
                 countryCode: selectedCountry.countryCode,
-                phoneNumber: parsedNumber,
+                phoneNumber: cleanPhoneStr,
               });
             }
             return;
