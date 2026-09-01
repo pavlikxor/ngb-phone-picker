@@ -1,3 +1,5 @@
+import '@angular/compiler';
+
 import { describe, expect, it } from 'vitest';
 
 import { buildHighlightedSegments } from '../projects/ngb-phone-picker/src/lib/ngb-phone-picker';
