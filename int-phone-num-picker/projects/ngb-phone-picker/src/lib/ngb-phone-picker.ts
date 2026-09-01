@@ -225,67 +225,74 @@ export class NgbPhonePicker implements FormValueControl<PhoneNumberValue> {
     this.value.set(null);
   }
 
+  private syncSelectionFromValue(parentVal: PhoneNumberValue): void {
+    if (!parentVal) {
+      if (!this.selectedCountry()) {
+        this.phoneNumber.set({ phoneNumber: '' });
+      }
+      return;
+    }
+
+    const matchedCountry = this.countryOptions().find(
+      c => c.countryCode === parentVal.countryCode,
+    );
+
+    if (
+      matchedCountry &&
+      this.selectedCountry()?.countryCode !== matchedCountry.countryCode
+    ) {
+      this.selectedCountry.set(matchedCountry);
+    }
+
+    const phoneStr = parentVal.phoneNumber ?? '';
+    if (this.phoneNumber().phoneNumber !== phoneStr) {
+      this.phoneNumber.set({ phoneNumber: phoneStr });
+    }
+  }
+
+  private syncValueFromSelection(): void {
+    const selectedCountry = this.selectedCountry();
+    const phoneNumber = this.phoneNumber().phoneNumber;
+    const isPhoneFormValid = this.phoneForm().valid();
+
+    if (!selectedCountry || !isPhoneFormValid || !phoneNumber) {
+      if (this.value() !== null) {
+        this.value.set(null);
+      }
+      return;
+    }
+
+    const cleanPhoneStr = phoneNumber.replace(/\D/g, '');
+    if (!cleanPhoneStr) {
+      if (this.value() !== null) {
+        this.value.set(null);
+      }
+      return;
+    }
+
+    const nextValue = {
+      countryCode: selectedCountry.countryCode,
+      phoneNumber: cleanPhoneStr,
+    };
+    const currentVal = this.value();
+
+    if (
+      !currentVal ||
+      currentVal.countryCode !== nextValue.countryCode ||
+      currentVal.phoneNumber !== nextValue.phoneNumber
+    ) {
+      this.value.set(nextValue);
+    }
+  }
+
   constructor() {
-    // 1. INWARD SYNC: Parent Form (this.value) -> Internal UI Signals
     effect(() => {
       const parentVal = this.value();
-
-      untracked(() => {
-        if (!parentVal) {
-          if (!this.selectedCountry()) {
-            this.phoneNumber.set({ phoneNumber: '' });
-          }
-          return;
-        }
-
-        const matchedCountry = this.countryOptions().find(
-          c => c.countryCode === parentVal.countryCode,
-        );
-
-        if (
-          matchedCountry &&
-          this.selectedCountry()?.countryCode !== matchedCountry.countryCode
-        ) {
-          this.selectedCountry.set(matchedCountry);
-        }
-
-        const phoneStr = parentVal.phoneNumber ?? '';
-        if (this.phoneNumber().phoneNumber !== phoneStr) {
-          this.phoneNumber.set({ phoneNumber: phoneStr });
-        }
-      });
+      untracked(() => this.syncSelectionFromValue(parentVal));
     });
 
-    // 2. OUTWARD SYNC: Internal UI Signals -> Parent Form (this.value)
     effect(() => {
-      const selectedCountry = this.selectedCountry();
-      const phoneNumber = this.phoneNumber().phoneNumber;
-      const isPhoneFormValid = this.phoneForm().valid();
-
-      untracked(() => {
-        if (selectedCountry && isPhoneFormValid && phoneNumber) {
-          const cleanPhoneStr = phoneNumber.replace(/\D/g, '');
-          if (cleanPhoneStr) {
-            const currentVal = this.value();
-
-            if (
-              !currentVal ||
-              currentVal.countryCode !== selectedCountry.countryCode ||
-              currentVal.phoneNumber !== cleanPhoneStr
-            ) {
-              this.value.set({
-                countryCode: selectedCountry.countryCode,
-                phoneNumber: cleanPhoneStr,
-              });
-            }
-            return;
-          }
-        }
-
-        if (this.value() !== null) {
-          this.value.set(null);
-        }
-      });
+      untracked(() => this.syncValueFromSelection());
     });
   }
 }
