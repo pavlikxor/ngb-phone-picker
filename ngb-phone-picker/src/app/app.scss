@@ -67,14 +67,15 @@ h1 {
 
 .value-panel {
   margin-top: 1.5rem;
+  background-color: #f8fafc;
+  padding: 1rem;
   border: {
     width: 1px;
     style: solid;
     color: #e2e8f0;
     radius: 4px;
   }
-  background-color: #f8fafc;
-  padding: 1rem;
+
   h2 {
     margin: 0 0 0.75rem;
     font-size: 1rem;

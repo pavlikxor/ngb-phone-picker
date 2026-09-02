@@ -1,45 +1,44 @@
 # Copilot instructions for ngb-phone-picker
 
-## Project scope
+## Scope and references
 
-- This workspace contains an Angular demo app plus a reusable library package, both rooted in the `ngb-phone-picker/` folder.
-- The demo app lives in `src/app`, while the reusable component and helpers live in `projects/ngb-phone-picker/src/lib`.
-- The published library package metadata is in `projects/ngb-phone-picker/package.json`; keep changes consistent with the actual Angular package name and structure.
-- For local setup and project overview, start with [README.md](../README.md) and the library README at [projects/ngb-phone-picker/README.md](../projects/ngb-phone-picker/README.md).
+- Run commands from the `ngb-phone-picker/` Angular workspace.
+- The workspace contains the `ngb-phone-picker-demo` standalone app in `src/app` and the reusable `ngb-phone-picker` library in `projects/ngb-phone-picker`.
+- Start with the workspace [README](../README.md) and [library README](../projects/ngb-phone-picker/README.md) for public usage and release details.
+- The library public API is defined in [public-api.ts](../projects/ngb-phone-picker/src/public-api.ts); keep exports and package metadata in sync.
 
 ## Commands
 
-- Start the demo app: `npm start`
+- Install dependencies: `npm ci`
+- Start the demo: `npm start`
 - Build the library: `npm run build`
-- Build the demo app: `npm run build:demo`
-- Run the test suite: `npm test`
-- Watch tests while editing: `npm run test:watch`
+- Build the demo for GitHub Pages: `npm run build:demo`
+- Run Vitest: `npm test`
+- Run Vitest in watch mode: `npm run test:watch`
+- There is no lint script. The `watch` package script is malformed; use the commands above instead.
 
 ## Architecture and conventions
 
-- Prefer Angular 22 patterns: standalone components, signals, and the `@angular/forms/signals` API.
-- Use `signal()` for local state and `computed()` for derived values; keep state transitions explicit and predictable.
-- Prefer `input()` and `model()` over decorator-based APIs for new code.
-- Keep helper functions pure and easy to unit-test; avoid spreading business logic across templates.
-- The library should remain reusable and presentable: validation and user-facing copy must be friendly and short.
+- Use Angular 22 standalone components, strict TypeScript/templates, signals, and `@angular/forms/signals`.
+- Follow the existing `input()`, `model()`, `signal()`, `computed()`, and `effect()` patterns rather than introducing decorator-based APIs for new code.
+- `NgbPhonePicker` implements `FormValueControl<PhoneNumberValue>`; preserve the parent-form contract and keep invalid or empty values from being emitted as valid phone models.
+- Keep parsing and validation based on `awesome-phonenumber`; keep pure helpers exportable and easy to test.
+- Country names are localized by `RegionNameService`; filtering supports country name, ISO region code, and calling code, with preferred countries first.
+- Preserve the public input spelling `prefferedCountries` for compatibility unless a deliberate migration path is added.
+- Keep user-facing validation concise and friendly; do not expose raw parser or internal library errors.
 
-## Validation and UX
+## Testing
 
-- Do not leak internal `awesome-phonenumber` or library-specific errors into the UI.
-- Prefer user text such as: "Use only numbers, spaces, and dashes." or "Please enter a valid phone number for [country]."
-- Keep validation wording consistent across the component and shared helper logic.
-- Preserve country filtering, highlighting, and keyboard interaction behavior when editing the picker.
-
-## Testing expectations
-
-- Validate with focused Vitest runs when possible, for example: `npm test -- --run <path-to-spec>`.
-- Add or update tests for helper functions, validation branches, and country/format edge cases.
-- If a unit test requires Angular JIT compilation, import `@angular/compiler` at the top of the spec before using it.
+- Vitest discovers `tests/**/*.spec.ts` and `projects/**/*.spec.ts` in the jsdom environment; use a focused run while iterating, for example `npm test -- --run projects/ngb-phone-picker/src/lib/ngb-phone-picker.spec.ts`.
+- Add or update tests for exported helpers, signal-form synchronization, validation branches, country ordering/filtering, localization, and focus behavior when those paths change.
+- Import `@angular/compiler` at the top of specs that instantiate Angular components or otherwise require Angular JIT compilation.
+- Check both library and demo builds for changes that cross the package boundary.
 
 ## Files to inspect first
 
-- [README.md](../README.md)
-- [projects/ngb-phone-picker/src/lib/ngb-phone-picker.ts](../projects/ngb-phone-picker/src/lib/ngb-phone-picker.ts)
-- [projects/ngb-phone-picker/src/lib/phone-validation.ts](../projects/ngb-phone-picker/src/lib/phone-validation.ts)
-- [projects/ngb-phone-picker/src/lib/ngb-phone-picker.spec.ts](../projects/ngb-phone-picker/src/lib/ngb-phone-picker.spec.ts)
-- [tests/ngb-phone-picker.spec.ts](../tests/ngb-phone-picker.spec.ts)
+- [NgbPhonePicker](../projects/ngb-phone-picker/src/lib/ngb-phone-picker.ts)
+- [picker template](../projects/ngb-phone-picker/src/lib/ngb-phone-picker.html)
+- [picker styles](../projects/ngb-phone-picker/src/lib/ngb-phone-picker.scss)
+- [picker unit tests](../projects/ngb-phone-picker/src/lib/ngb-phone-picker.spec.ts)
+- [region name service](../projects/ngb-phone-picker/src/lib/region-names.ts)
+- [demo app](../src/app/app.ts)

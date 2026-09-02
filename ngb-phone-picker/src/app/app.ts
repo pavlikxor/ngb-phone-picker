@@ -1,6 +1,6 @@
 import { JsonPipe } from '@angular/common';
 import { Component, signal } from '@angular/core';
-import { form, FormField } from '@angular/forms/signals';
+import { disabled, form, FormField } from '@angular/forms/signals';
 import {
   NgbPhonePicker,
   PhoneNumberModel,
@@ -17,18 +17,26 @@ export class App {
 
   readonly preferredCountries = ['ua', 'dk', 'us', 'de'];
 
+  private readonly disabled = signal(false);
+
   readonly phone = signal<PhoneNumberModel | null>({
     countryCode: 45,
     phoneNumber: '26668888',
   });
 
-  readonly phoneForm = form(this.phone);
+  readonly phoneForm = form(this.phone, schemaPath => {
+    disabled(schemaPath, { when: () => this.disabled() });
+  });
 
   setDemo(example: PhoneNumberModel): void {
-    this.phone.set(example);
+    this.phoneForm().value.set(example);
   }
 
   clearDemo(): void {
-    this.phone.set(null);
+    this.phoneForm().reset();
+  }
+
+  toggleForm(): void {
+    this.disabled.update(prev => !prev);
   }
 }

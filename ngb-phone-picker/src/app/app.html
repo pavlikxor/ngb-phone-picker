@@ -32,15 +32,21 @@
         (click)="clearDemo()">
         Clear
       </button>
+      <button
+        type="button"
+        class="demo-button"
+        (click)="toggleForm()">
+        {{ phoneForm().disabled() ? 'Enable' : 'Disable' }} form
+      </button>
     </div>
-`
+
     <ngb-phone-picker
       [formField]="phoneForm"
       [prefferedCountries]="preferredCountries"></ngb-phone-picker>
 
     <div class="value-panel">
-      <h2>Current value</h2>
-      <pre>{{ phone() | json }}</pre>
+      <h2>Form value</h2>
+      <pre>{{ phoneForm().value() | json }}</pre>
     </div>
   </section>
 </main>

@@ -2,22 +2,10 @@ import '@angular/compiler';
 
 import { describe, expect, it } from 'vitest';
 
-import { buildHighlightedSegments } from './ngb-phone-picker';
-import { buildPhoneValidationMessage } from './phone-validation';
-
-describe('buildPhoneValidationMessage', () => {
-  it('uses friendly wording for invalid character input', () => {
-    expect(buildPhoneValidationMessage('United States', '123+456')).toBe(
-      'Use only numbers, spaces, and dashes.',
-    );
-  });
-
-  it('uses a friendly message when the phone number is invalid for the selected country', () => {
-    expect(buildPhoneValidationMessage('United States', '123')).toBe(
-      'Please enter a valid phone number for United States.',
-    );
-  });
-});
+import {
+  buildHighlightedSegments,
+  resolvePhoneValue,
+} from './ngb-phone-picker';
 
 describe('buildHighlightedSegments', () => {
   it('highlights the matching segment case-insensitively', () => {
@@ -39,6 +27,33 @@ describe('buildHighlightedSegments', () => {
       { text: 'a', isMatch: false },
       { text: '+b', isMatch: true },
     ]);
+  });
+});
+
+describe('resolvePhoneValue', () => {
+  it('returns a parsed value when the selected country and phone number are valid', () => {
+    expect(
+      resolvePhoneValue(
+        { countryCode: 45, prefix: 'DK', countryName: 'Denmark' },
+        '26668888',
+      ),
+    ).toEqual({
+      countryCode: 45,
+      phoneNumber: '26668888',
+    });
+  });
+
+  it('returns null when the selected country and phone number are invalid', () => {
+    expect(
+      resolvePhoneValue(
+        { countryCode: 1, prefix: 'US', countryName: 'United States' },
+        '123',
+      ),
+    ).toBeNull();
+  });
+
+  it('returns null when no country and no phone are selected', () => {
+    expect(resolvePhoneValue(undefined, '')).toBeNull();
   });
 });
 

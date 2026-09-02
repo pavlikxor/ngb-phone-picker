@@ -18,7 +18,7 @@ This component is designed to work with Angular forms in all three common styles
 - Template-driven forms via `ngModel`
 - Signal-based forms via `formField`
 
-Example usage with a reactive form:
+Example usage with a Reactive form:
 
 ```ts
 import { FormControl } from "@angular/forms";
@@ -33,7 +33,7 @@ phoneControl = new FormControl({
 <ngb-phone-picker [formControl]="phoneControl"></ngb-phone-picker>
 ```
 
-Example usage with a signal-based form field:
+Example usage with a Signal form:
 
 ```ts
 import { signal } from '@angular/core';

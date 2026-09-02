@@ -33,7 +33,6 @@ import {
   getSupportedRegionCodes,
   parsePhoneNumber,
 } from 'awesome-phonenumber';
-import { buildPhoneValidationMessage } from './phone-validation';
 import { RegionNameService } from './region-names';
 
 interface CountryOption {
@@ -84,6 +83,28 @@ export interface PhoneNumberModel {
 }
 
 export type PhoneNumberValue = PhoneNumberModel | null;
+
+export function resolvePhoneValue(
+  selectedCountry: CountryOption | undefined,
+  phoneNumber: string | undefined,
+): PhoneNumberValue {
+  const cleanPhoneStr = (phoneNumber ?? '').replace(/\D/g, '');
+
+  if (!selectedCountry || !cleanPhoneStr) {
+    return null;
+  }
+
+  const parsedNumber = parsePhoneNumber(
+    `+${selectedCountry.countryCode}${cleanPhoneStr}`,
+  );
+
+  return parsedNumber.valid
+    ? {
+        countryCode: selectedCountry.countryCode,
+        phoneNumber: cleanPhoneStr,
+      }
+    : null;
+}
 
 @Component({
   selector: 'ngb-phone-picker',
@@ -171,12 +192,10 @@ export class NgbPhonePicker implements FormValueControl<PhoneNumberValue> {
   });
 
   phoneForm = form(this.phoneNumber, schemaPath => {
+    debounce(schemaPath.phoneNumber, 200);
     disabled(schemaPath, { when: () => this.disabled() });
     pattern(schemaPath.phoneNumber, /^[0-9\- ]+$/, {
-      message: buildPhoneValidationMessage(
-        this.selectedCountry()?.countryName,
-        this.phoneNumber().phoneNumber,
-      ),
+      message: 'Use only numbers, spaces, and dashes',
     });
     validate(schemaPath.phoneNumber, ({ value }) => {
       const inputValue = value();
@@ -192,7 +211,10 @@ export class NgbPhonePicker implements FormValueControl<PhoneNumberValue> {
         ? null
         : {
             kind: 'invalidPhoneNumber',
-            message: buildPhoneValidationMessage(countryName, inputValue),
+            message:
+              pn.error instanceof Error
+                ? pn.error.message
+                : `Please enter a valid phone number for ${countryName}`,
           };
     });
   });
@@ -203,7 +225,7 @@ export class NgbPhonePicker implements FormValueControl<PhoneNumberValue> {
 
   searchCountryForm = form(this.countrySearch, schemaPath => {
     disabled(schemaPath, { when: () => this.disabled() });
-    debounce(schemaPath.query, 100);
+    debounce(schemaPath.query, 200);
   });
 
   countrySearchInput =
@@ -238,7 +260,12 @@ export class NgbPhonePicker implements FormValueControl<PhoneNumberValue> {
 
   private syncSelectionFromValue(parentVal: PhoneNumberValue): void {
     if (!parentVal) {
-      this.reset();
+      const hasLocalState =
+        !!this.selectedCountry() || !!this.phoneNumber().phoneNumber;
+
+      if (!hasLocalState) {
+        this.reset();
+      }
       return;
     }
     const parsedNumber = parsePhoneNumber(
@@ -266,27 +293,23 @@ export class NgbPhonePicker implements FormValueControl<PhoneNumberValue> {
   private syncValueFromSelection(): void {
     const selectedCountry = this.selectedCountry();
     const phoneNumber = this.phoneNumber().phoneNumber;
-    const isPhoneFormValid = this.phoneForm().valid();
 
-    if (!selectedCountry || !isPhoneFormValid || !phoneNumber) {
+    if (!selectedCountry || !phoneNumber) {
       if (this.value() !== null) {
         this.value.set(null);
       }
       return;
     }
 
-    const cleanPhoneStr = phoneNumber.replace(/\D/g, '');
-    if (!cleanPhoneStr) {
+    const nextValue = resolvePhoneValue(selectedCountry, phoneNumber);
+
+    if (!nextValue) {
       if (this.value() !== null) {
         this.value.set(null);
       }
       return;
     }
 
-    const nextValue = {
-      countryCode: selectedCountry.countryCode,
-      phoneNumber: cleanPhoneStr,
-    };
     const currentVal = this.value();
 
     if (
@@ -305,7 +328,7 @@ export class NgbPhonePicker implements FormValueControl<PhoneNumberValue> {
     });
 
     effect(() => {
-      untracked(() => this.syncValueFromSelection());
+      this.syncValueFromSelection();
     });
   }
 }

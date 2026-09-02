@@ -64,35 +64,6 @@ The component exposes a stable phone value model shaped as:
 }
 ```
 
-## Development
-
-From the repo root, run:
-
-```bash
-npm install
-npm start
-```
-
-## Build
-
-```bash
-npm run build
-```
-
-## Test
-
-This package uses [Vitest](https://vitest.dev/) for unit tests:
-
-```bash
-npm run test
-```
-
-For an interactive watch session:
-
-```bash
-npm run test:watch
-```
-
 ## Inputs
 
 ### `region`
@@ -112,7 +83,3 @@ Use `prefferedCountries` to prioritize a list of country codes at the top of the
 ```html
 <ngb-phone-picker [prefferedCountries]="['US', 'GB', 'DE']"></ngb-phone-picker>
 ```
-
-## Notes
-
-The component exposes a clear public phone model shape and keeps the selected country / emitted value transitions consistent while filtering on the debounced search query.
